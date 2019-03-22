@@ -1,4 +1,5 @@
-from copy import * 
+from copy import *
+import math
 words = ['decembe', 'februay', 'octobe']
 dictionary = []
 mydict = []
@@ -8,7 +9,7 @@ with open('english2.txt', 'r') as f:
         dictionary.append(word)
         
 
-smallest_length = 10000000
+smallest_length = math.inf
 shortest_word = ''
 for word in words:
     if len(word) < smallest_length:
@@ -94,9 +95,23 @@ for word in countLetters.keys():
             del myCountLetters[word]
             break
 
-        
-print(myCountLetters)
+countLetters = deepcopy(myCountLetters)
 
+final_words = []
+for word in countLetters.keys():
+    final_words.append(word)
+final_words.remove(shortest_word)
+
+shortest_sum = 0
+sigma = 0
+
+for letter in shortest_word:
+    sigma += ord(letter)
+
+print('Answer:')      
+for word in final_words:
+    print('Word = '+ word + ' ? = ' + chr(wordSum[word] - sigma))
+    
 
 
 
