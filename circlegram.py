@@ -81,12 +81,22 @@ for word in wordSum.keys():
 
 myCountLetters = deepcopy(countLetters)
 
-for word in wordSum.keys():
-    for key in countLetters[shortest_word].keys():
-        if countLetters[word][key] < counterLetters[shortest_word][key]:
-            del myCountLetters[word]
+with open('dict.txt', 'w') as f:
+    f.write(str(countLetters))
 
+for word in countLetters.keys():
+    for letter in countLetters[shortest_word].keys():
+        try:
+            if countLetters[word][letter] < countLetters[shortest_word][letter]:
+                del myCountLetters[word]
+                break
+        except:
+            del myCountLetters[word]
+            break
+
+        
 print(myCountLetters)
+
 
 
 
