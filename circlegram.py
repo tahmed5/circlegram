@@ -43,7 +43,50 @@ for word in mydict:
         sigma += ord(letter)
     wordSum[word] = sigma
 
-print(wordSum['october'])
+def multiSum(char,shortest_word):
+    sigma = 0
+    shortest_word += char
+    for letter in shortest_word:
+        sigma += ord(letter)
+    valid_ascii.append(sigma)
+        
+valid_ascii = []
+
+for letter in alphabet:
+    multiSum(letter,shortest_word)
+
+myWordSum = deepcopy(wordSum)
+
+for key,value in wordSum.items():
+    if value not in valid_ascii:
+        del myWordSum[key]
+
+countLetters = {}
+wordSum = deepcopy(myWordSum)
+countLetters[shortest_word] = {}
+
+for letter in shortest_word:
+    if letter not in countLetters[shortest_word].keys():
+        countLetters[shortest_word][letter] = 0
+    countLetters[shortest_word][letter] += 1
+
+for word in wordSum:
+    countLetters[word] = {}
+
+for word in wordSum.keys():
+    for letter in word:
+        if letter not in countLetters[word].keys():
+            countLetters[word][letter] = 0
+        countLetters[word][letter] += 1
+
+myCountLetters = deepcopy(countLetters)
+
+for word in wordSum.keys():
+    for key in countLetters[shortest_word].keys():
+        if countLetters[word][key] < counterLetters[shortest_word][key]:
+            del myCountLetters[word]
+
+print(myCountLetters)
 
 
 
