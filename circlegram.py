@@ -1,116 +1,114 @@
 from copy import *
 import math
-words = ['decembe', 'februay', 'octobe']
-dictionary = []
-mydict = []
+words = ['eennyhe', 'nillno', 'nodrco']
+answers = []
+word_index = 0
+while words:
+    shortest_word = words.pop()
+    smallest_length = len(shortest_word)
+    word_index += 1
 
-with open('english2.txt', 'r') as f:
-    for word in f.read().split('\n'):
-        dictionary.append(word)
-        
+    dictionary = []
+    mydict = []
 
-smallest_length = math.inf
-shortest_word = ''
-for word in words:
-    if len(word) < smallest_length:
-        smallest_length = len(word)
-        shortest_word = word
+    with open('ukenglish.txt', 'r',encoding="Latin-1") as f:
+        for word in f.read().split('\n'):
+            dictionary.append(word)
+            
+    mydict = deepcopy(dictionary)
 
-print(shortest_word,smallest_length)
+    max_length = smallest_length + 1 #e.g decembe = 7
+    for word in dictionary:
+        if len(word) > max_length:
+            mydict.remove(word)
+            
+    alphabet = []
+    for letter in range(97,123):
+        alphabet.append(chr(letter))
 
-mydict = deepcopy(dictionary)
-print(len(mydict))
+    unique_letters = []
+    for word in words:
+        for letter in word:
+            if letter not in unique_letters:
+                unique_letters.append(letter)
+    wordSum = {}
 
-max_length = smallest_length + 1 #e.g decembe = 7
-for word in dictionary:
-    if len(word) > max_length:
-        mydict.remove(word)
-print(len(mydict))
+    for word in mydict:
+        sigma = 0
+        for letter in word:
+            sigma += ord(letter)
+        wordSum[word] = sigma
 
-alphabet = []
-for letter in range(97,123):
-    alphabet.append(chr(letter))
+    def multiSum(char,shortest_word):
+        sigma = 0
+        shortest_word += char
+        for letter in shortest_word:
+            sigma += ord(letter)
+        valid_ascii.append(sigma)
+            
+    valid_ascii = []
 
-unique_letters = []
-for word in words:
-    for letter in word:
-        if letter not in unique_letters:
-            unique_letters.append(letter)
-wordSum = {}
+    for letter in alphabet:
+        multiSum(letter,shortest_word)
 
-for word in mydict:
-    sigma = 0
-    for letter in word:
-        sigma += ord(letter)
-    wordSum[word] = sigma
+    myWordSum = deepcopy(wordSum)
 
-def multiSum(char,shortest_word):
-    sigma = 0
-    shortest_word += char
+    for key,value in wordSum.items():
+        if value not in valid_ascii:
+            del myWordSum[key]
+
+    countLetters = {}
+    wordSum = deepcopy(myWordSum)
+    countLetters[shortest_word] = {}
+
     for letter in shortest_word:
-        sigma += ord(letter)
-    valid_ascii.append(sigma)
-        
-valid_ascii = []
+        if letter not in countLetters[shortest_word].keys():
+            countLetters[shortest_word][letter] = 0
+        countLetters[shortest_word][letter] += 1
 
-for letter in alphabet:
-    multiSum(letter,shortest_word)
+    for word in wordSum:
+        countLetters[word] = {}
 
-myWordSum = deepcopy(wordSum)
+    for word in wordSum.keys():
+        for letter in word:
+            if letter not in countLetters[word].keys():
+                countLetters[word][letter] = 0
+            countLetters[word][letter] += 1
 
-for key,value in wordSum.items():
-    if value not in valid_ascii:
-        del myWordSum[key]
+    myCountLetters = deepcopy(countLetters)
 
-countLetters = {}
-wordSum = deepcopy(myWordSum)
-countLetters[shortest_word] = {}
+    with open('dict.txt', 'w') as f:
+        f.write(str(countLetters))
 
-for letter in shortest_word:
-    if letter not in countLetters[shortest_word].keys():
-        countLetters[shortest_word][letter] = 0
-    countLetters[shortest_word][letter] += 1
-
-for word in wordSum:
-    countLetters[word] = {}
-
-for word in wordSum.keys():
-    for letter in word:
-        if letter not in countLetters[word].keys():
-            countLetters[word][letter] = 0
-        countLetters[word][letter] += 1
-
-myCountLetters = deepcopy(countLetters)
-
-with open('dict.txt', 'w') as f:
-    f.write(str(countLetters))
-
-for word in countLetters.keys():
-    for letter in countLetters[shortest_word].keys():
-        try:
-            if countLetters[word][letter] < countLetters[shortest_word][letter]:
+    for word in countLetters.keys():
+        for letter in countLetters[shortest_word].keys():
+            try:
+                if countLetters[word][letter] < countLetters[shortest_word][letter]:
+                    del myCountLetters[word]
+                    break
+            except:
                 del myCountLetters[word]
                 break
-        except:
-            del myCountLetters[word]
-            break
 
-countLetters = deepcopy(myCountLetters)
+    countLetters = deepcopy(myCountLetters)
 
-final_words = []
-for word in countLetters.keys():
-    final_words.append(word)
-final_words.remove(shortest_word)
+    final_words = []
+    for word in countLetters.keys():
+        final_words.append(word)
+    final_words.remove(shortest_word)
 
-shortest_sum = 0
-sigma = 0
+    shortest_sum = 0
+    sigma = 0
 
-for letter in shortest_word:
-    sigma += ord(letter)
+    for letter in shortest_word:
+        sigma += ord(letter)
+    
+    for word in final_words:
+        question_mark = chr(wordSum[word] - sigma)
+        answers.append((word,question_mark,word_index))
 
-print('Answer:')      
-for word in final_words:
-    print('Word = '+ word + ' ? = ' + chr(wordSum[word] - sigma))
+for answer in answers:
+    print(answer)
     
 
 
